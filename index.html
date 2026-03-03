@@ -3,177 +3,379 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hibe Takip Rehberi — İzmir Büyükşehir Belediyesi</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>Hibe Takip Robotu — İzmir Büyükşehir Belediyesi</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0f1117;
-    --surface: #181b24;
-    --surface-2: #1e222d;
-    --border: #2a2f3d;
-    --text: #e4e6ed;
-    --text-dim: #8b90a0;
-    --accent-eu: #4a90d9;
-    --accent-eu-bg: rgba(74, 144, 217, 0.08);
-    --accent-tr: #e05555;
-    --accent-tr-bg: rgba(224, 85, 85, 0.08);
-    --accent-local: #50b88e;
-    --accent-local-bg: rgba(80, 184, 142, 0.08);
-    --accent-mixed: #c49a4a;
-    --accent-mixed-bg: rgba(196, 154, 74, 0.08);
-    --tag-newsletter: #7c6dd8;
-    --tag-newsletter-bg: rgba(124, 109, 216, 0.12);
-    --tag-portal: #d97a4a;
-    --tag-portal-bg: rgba(217, 122, 74, 0.12);
-    --tag-alert: #4abfd9;
-    --tag-alert-bg: rgba(74, 191, 217, 0.12);
+    --bg: #08090d;
+    --surface: #12141c;
+    --surface-2: #191c27;
+    --surface-3: #1f2333;
+    --border: #252a3a;
+    --border-hover: #353b50;
+    --text: #e8eaf0;
+    --text-dim: #7d8298;
+    --text-muted: #555a6e;
+
+    --accent-eu: #5b9cf5;
+    --accent-eu-glow: rgba(91, 156, 245, 0.12);
+    --accent-eu-soft: rgba(91, 156, 245, 0.06);
+
+    --accent-tr: #f06060;
+    --accent-tr-glow: rgba(240, 96, 96, 0.12);
+    --accent-tr-soft: rgba(240, 96, 96, 0.06);
+
+    --accent-local: #3ec992;
+    --accent-local-glow: rgba(62, 201, 146, 0.12);
+    --accent-local-soft: rgba(62, 201, 146, 0.06);
+
+    --tag-newsletter: #a78bfa;
+    --tag-newsletter-bg: rgba(167, 139, 250, 0.1);
+    --tag-portal: #fb923c;
+    --tag-portal-bg: rgba(251, 146, 60, 0.1);
+    --tag-alert: #38bdf8;
+    --tag-alert-bg: rgba(56, 189, 248, 0.1);
+
+    --radius: 10px;
+    --radius-sm: 6px;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Outfit', sans-serif;
     background: var(--bg);
     color: var(--text);
     min-height: 100vh;
-    padding: 2rem 1.5rem;
+    overflow-x: hidden;
   }
 
-  .container {
-    max-width: 1100px;
+  /* Subtle grid bg */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 80px 80px;
+    opacity: 0.08;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Top gradient glow */
+  body::after {
+    content: '';
+    position: fixed;
+    top: -200px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 800px;
+    height: 500px;
+    background: radial-gradient(ellipse, rgba(91,156,245,0.06) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page-wrapper {
+    position: relative;
+    z-index: 1;
+    max-width: 960px;
     margin: 0 auto;
+    padding: 2.5rem 1.5rem 4rem;
   }
 
+  /* ─── HEADER ─── */
   header {
     margin-bottom: 2.5rem;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.3rem 0.7rem;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--text-dim);
+    margin-bottom: 1rem;
+    letter-spacing: 0.03em;
+  }
+
+  .header-badge .pulse {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent-local);
+    animation: pulse 2s ease infinite;
   }
 
   header h1 {
-    font-size: 1.6rem;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    margin-bottom: 0.4rem;
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+    margin-bottom: 0.5rem;
+  }
+
+  header h1 .robot-icon {
+    display: inline-block;
+    margin-right: 0.3rem;
   }
 
   header p {
     color: var(--text-dim);
     font-size: 0.88rem;
-    line-height: 1.5;
+    line-height: 1.6;
+    max-width: 600px;
   }
 
-  .legend {
+  /* ─── FILTER BAR ─── */
+  .filter-bar {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.6rem;
-    margin-bottom: 1.8rem;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    animation: fadeUp 0.6s 0.1s ease both;
   }
 
-  .legend-item {
-    display: flex;
+  .filter-btn {
+    display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
-    font-size: 0.75rem;
+    gap: 0.35rem;
+    padding: 0.4rem 0.85rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.76rem;
+    font-weight: 500;
     color: var(--text-dim);
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
   }
 
-  .legend-dot {
-    width: 8px;
-    height: 8px;
+  .filter-btn:hover {
+    border-color: var(--border-hover);
+    color: var(--text);
+    background: var(--surface-2);
+  }
+
+  .filter-btn.active {
+    border-color: var(--accent-eu);
+    color: var(--accent-eu);
+    background: var(--accent-eu-soft);
+  }
+
+  .filter-btn.active[data-filter="tr"] {
+    border-color: var(--accent-tr);
+    color: var(--accent-tr);
+    background: var(--accent-tr-soft);
+  }
+
+  .filter-btn.active[data-filter="local"] {
+    border-color: var(--accent-local);
+    color: var(--accent-local);
+    background: var(--accent-local-soft);
+  }
+
+  .filter-dot {
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
     flex-shrink: 0;
   }
 
+  /* ─── STATS ROW ─── */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.6rem;
+    margin-bottom: 2rem;
+    animation: fadeUp 0.6s 0.15s ease both;
+  }
+
+  .stat-card {
+    padding: 1rem 1.1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    text-align: center;
+  }
+
+  .stat-card .stat-number {
+    font-size: 1.5rem;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: -0.02em;
+  }
+
+  .stat-card .stat-label {
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    margin-top: 0.15rem;
+    font-weight: 500;
+  }
+
+  .stat-eu .stat-number { color: var(--accent-eu); }
+  .stat-tr .stat-number { color: var(--accent-tr); }
+  .stat-local .stat-number { color: var(--accent-local); }
+
+  /* ─── SECTIONS ─── */
   .section {
     margin-bottom: 2rem;
+    animation: fadeUp 0.6s 0.2s ease both;
   }
 
   .section-header {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
-    margin-bottom: 0.8rem;
-    padding-bottom: 0.5rem;
+    gap: 0.55rem;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.6rem;
     border-bottom: 1px solid var(--border);
   }
 
-  .section-header .dot {
+  .section-dot {
     width: 10px;
     height: 10px;
     border-radius: 50%;
     flex-shrink: 0;
+    position: relative;
+  }
+
+  .section-dot::after {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    border: 1px solid currentColor;
+    opacity: 0.25;
   }
 
   .section-header h2 {
-    font-size: 0.95rem;
-    font-weight: 600;
-    letter-spacing: 0.02em;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
+    color: var(--text-dim);
   }
 
+  .section-count {
+    margin-left: auto;
+    font-size: 0.68rem;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  /* ─── CARDS ─── */
   .card-grid {
-    display: grid;
-    gap: 0.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
   }
 
   .card {
     display: grid;
-    grid-template-columns: 1fr auto auto;
-    align-items: center;
+    grid-template-columns: 1fr auto;
+    align-items: start;
     gap: 1rem;
-    padding: 0.9rem 1.1rem;
+    padding: 0.95rem 1.15rem;
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 8px;
-    transition: background 0.15s, border-color 0.15s;
+    border-radius: var(--radius);
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.2s;
   }
 
   .card:hover {
     background: var(--surface-2);
-    border-color: #3a3f50;
+    border-color: var(--border-hover);
+    transform: translateY(-1px);
   }
 
-  .card-main {
-    min-width: 0;
-  }
+  .card:hover::before { opacity: 1; }
 
-  .card-name {
+  .card[data-category="eu"]::before { background: var(--accent-eu); }
+  .card[data-category="tr"]::before { background: var(--accent-tr); }
+  .card[data-category="local"]::before { background: var(--accent-local); }
+
+  .card-main { min-width: 0; }
+
+  .card-title {
     font-weight: 600;
-    font-size: 0.92rem;
-    margin-bottom: 0.2rem;
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
   }
 
-  .card-name a {
+  .card-title a {
     color: var(--text);
     text-decoration: none;
+    transition: color 0.15s;
   }
 
-  .card-name a:hover {
-    text-decoration: underline;
+  .card-title a:hover { color: var(--accent-eu); }
+  .card[data-category="tr"] .card-title a:hover { color: var(--accent-tr); }
+  .card[data-category="local"] .card-title a:hover { color: var(--accent-local); }
+
+  .card-title .external-icon {
+    opacity: 0;
+    transition: opacity 0.2s, transform 0.2s;
+    color: var(--text-muted);
+    flex-shrink: 0;
+  }
+
+  .card:hover .external-icon {
+    opacity: 1;
+    transform: translate(1px, -1px);
   }
 
   .card-desc {
     font-size: 0.78rem;
     color: var(--text-dim);
-    line-height: 1.45;
+    line-height: 1.55;
   }
 
-  .card-meta {
+  .card-right {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    gap: 0.35rem;
+    gap: 0.4rem;
     white-space: nowrap;
+    padding-top: 0.1rem;
   }
 
   .tag {
     display: inline-flex;
     align-items: center;
     padding: 0.2rem 0.55rem;
-    border-radius: 4px;
-    font-size: 0.68rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.62rem;
     font-weight: 600;
     font-family: 'JetBrains Mono', monospace;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.04em;
     text-transform: uppercase;
   }
 
@@ -182,391 +384,607 @@
   .tag-alert { background: var(--tag-alert-bg); color: var(--tag-alert); }
 
   .freq {
-    font-size: 0.72rem;
-    color: var(--text-dim);
+    font-size: 0.68rem;
+    color: var(--text-muted);
     font-family: 'JetBrains Mono', monospace;
+    font-weight: 500;
   }
 
-  .priority {
+  .priority-bar {
     display: flex;
-    align-items: center;
-    gap: 0.15rem;
+    gap: 3px;
   }
 
-  .priority-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
+  .priority-pip {
+    width: 14px;
+    height: 4px;
+    border-radius: 2px;
     background: var(--accent-local);
+    transition: opacity 0.2s;
   }
 
-  .priority-dot.off { opacity: 0.15; }
+  .priority-pip.off {
+    opacity: 0.12;
+  }
 
-  .footer-note {
-    margin-top: 2rem;
-    padding: 1rem 1.2rem;
+  /* ─── FOOTER ─── */
+  .footer-card {
+    margin-top: 2.5rem;
+    padding: 1.4rem 1.5rem;
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 8px;
-    font-size: 0.78rem;
-    color: var(--text-dim);
-    line-height: 1.6;
+    border-radius: var(--radius);
+    animation: fadeUp 0.6s 0.3s ease both;
   }
 
-  .footer-note strong {
+  .footer-card h3 {
+    font-size: 0.88rem;
+    font-weight: 700;
+    margin-bottom: 0.6rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .footer-card p {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    line-height: 1.7;
+  }
+
+  .footer-card p strong {
     color: var(--text);
     font-weight: 600;
   }
 
-  @media (max-width: 700px) {
+  .program-status {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.8rem;
+  }
+
+  .program-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.25rem 0.6rem;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    font-size: 0.68rem;
+    font-weight: 500;
+    color: var(--text-dim);
+  }
+
+  .program-chip .status-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+  }
+
+  .status-yes { background: var(--accent-local); }
+  .status-pending { background: #eab308; }
+  .status-no { background: var(--accent-tr); }
+
+  .site-footer {
+    margin-top: 2.5rem;
+    text-align: center;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    padding-bottom: 1rem;
+  }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(1.3); }
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 640px) {
+    .page-wrapper { padding: 1.5rem 1rem 3rem; }
+    header h1 { font-size: 1.5rem; }
+    .stats-row { grid-template-columns: 1fr; }
     .card {
       grid-template-columns: 1fr;
-      gap: 0.5rem;
+      gap: 0.6rem;
     }
-    .card-meta {
+    .card-right {
       flex-direction: row;
-      align-items: center;
       flex-wrap: wrap;
+      align-items: center;
     }
   }
 </style>
 </head>
 <body>
-<div class="container">
+<div class="page-wrapper">
 
-<header>
-  <h1>📋 Hibe & Fon Takip Rehberi</h1>
-  <p>İzmir Büyükşehir Belediyesi — AB Hibe Projeleri Birimi için derlenen kaynak listesi. Sık kullanılanlara ekle, haftada bir kontrol et.</p>
-</header>
+  <!-- HEADER -->
+  <header>
+    <div class="header-badge">
+      <div class="pulse"></div>
+      İzmir Büyükşehir Belediyesi — AB Hibe Projeleri Birimi
+    </div>
+    <h1><span class="robot-icon">🤖</span> Hibe Takip Robotu</h1>
+    <p>Tüm hibe ve fon kaynaklarını tek noktada takip et. Haftalık kontrol listesi olarak kullan, bültenlere abone ol, alert'leri kur.</p>
+  </header>
 
-<div class="legend">
-  <div class="legend-item"><div class="legend-dot" style="background:var(--accent-eu)"></div> AB / Uluslararası</div>
-  <div class="legend-item"><div class="legend-dot" style="background:var(--accent-tr)"></div> Türkiye Ulusal</div>
-  <div class="legend-item"><div class="legend-dot" style="background:var(--accent-local)"></div> İzmir / Yerel</div>
-  <div class="legend-item"><div class="legend-dot" style="background:var(--accent-mixed)"></div> Karma</div>
-  <span style="margin-left:1rem"></span>
-  <div class="legend-item"><span class="tag tag-newsletter">Bülten</span> E-posta bülteni</div>
-  <div class="legend-item"><span class="tag tag-portal">Portal</span> Web portal</div>
-  <div class="legend-item"><span class="tag tag-alert">Alert</span> Otomatik bildirim</div>
-</div>
-
-<!-- AB / ULUSLARARASI -->
-<div class="section">
-  <div class="section-header">
-    <div class="dot" style="background:var(--accent-eu)"></div>
-    <h2>AB & Uluslararası Kaynaklar</h2>
+  <!-- FILTERS -->
+  <div class="filter-bar">
+    <button class="filter-btn active" data-filter="all">Tümü</button>
+    <button class="filter-btn" data-filter="eu">
+      <span class="filter-dot" style="background:var(--accent-eu)"></span> AB / Uluslararası
+    </button>
+    <button class="filter-btn" data-filter="tr">
+      <span class="filter-dot" style="background:var(--accent-tr)"></span> Türkiye Ulusal
+    </button>
+    <button class="filter-btn" data-filter="local">
+      <span class="filter-dot" style="background:var(--accent-local)"></span> İzmir / Yerel
+    </button>
   </div>
-  <div class="card-grid">
 
-    <div class="card">
-      <div class="card-main">
-        <div class="card-name"><a href="https://ec.europa.eu/info/funding-tenders/opportunities/portal/" target="_blank">EU Funding & Tenders Portal</a></div>
-        <div class="card-desc">Resmi AB portalı. Horizon Europe, LIFE, Interreg, CERV vb. tüm açık çağrılar. İlgi alanına göre e-posta alert'i kurulabilir.</div>
-      </div>
-      <div class="card-meta">
-        <span class="tag tag-alert">Alert</span>
-        <span class="freq">Anlık</span>
-      </div>
-      <div class="priority">
-        <div class="priority-dot"></div>
-        <div class="priority-dot"></div>
-        <div class="priority-dot"></div>
-      </div>
+  <!-- STATS -->
+  <div class="stats-row">
+    <div class="stat-card stat-eu">
+      <div class="stat-number" id="count-eu">5</div>
+      <div class="stat-label">AB / Uluslararası</div>
     </div>
-
-    <div class="card">
-      <div class="card-main">
-        <div class="card-name"><a href="https://eufundingportal.eu/" target="_blank">EUFundingPortal.eu</a></div>
-        <div class="card-desc">Bağımsız AB fon veritabanı. Ücretsiz günlük newsletter. 99€/yıl ile tüm detaylara erişim. 478+ açık çağrı.</div>
-      </div>
-      <div class="card-meta">
-        <span class="tag tag-newsletter">Bülten</span>
-        <span class="freq">Günlük</span>
-      </div>
-      <div class="priority">
-        <div class="priority-dot"></div>
-        <div class="priority-dot"></div>
-        <div class="priority-dot"></div>
-      </div>
+    <div class="stat-card stat-tr">
+      <div class="stat-number" id="count-tr">11</div>
+      <div class="stat-label">Türkiye Ulusal</div>
     </div>
-
-    <div class="card">
-      <div class="card-main">
-        <div class="card-name"><a href="https://www.euro-access.eu/" target="_blank">EuroAccess</a></div>
-        <div class="card-desc">Kuruluş türüne göre filtreleme, kişisel "funding basket", PDF export. Düzenli newsletter.</div>
-      </div>
-      <div class="card-meta">
-        <span class="tag tag-newsletter">Bülten</span>
-        <span class="freq">Haftalık</span>
-      </div>
-      <div class="priority">
-        <div class="priority-dot"></div>
-        <div class="priority-dot"></div>
-        <div class="priority-dot off"></div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-main">
-        <div class="card-name"><a href="https://keep.eu/" target="_blank">keep.eu — Interreg Veritabanı</a></div>
-        <div class="card-desc">Tüm Interreg programları (MED, NEXT, Euro-MED vb.) proje ve partner veritabanı. Partner arama için birebir.</div>
-      </div>
-      <div class="card-meta">
-        <span class="tag tag-portal">Portal</span>
-        <span class="freq">Sürekli</span>
-      </div>
-      <div class="priority">
-        <div class="priority-dot"></div>
-        <div class="priority-dot"></div>
-        <div class="priority-dot off"></div>
-      </div>
+    <div class="stat-card stat-local">
+      <div class="stat-number" id="count-local">2</div>
+      <div class="stat-label">İzmir / Yerel</div>
     </div>
   </div>
-<div class="card">
-  <div class="card-main">
-    <div class="card-name"><a href="https://www.interregnextmed.eu/apply-for-funding/" target="_blank">Interreg NEXT MED</a></div>
-    <div class="card-desc">Akdeniz havzası sınır ötesi işbirliği.</div>
-  </div>
-  <div class="card-meta">
-    <span class="tag tag-portal">Portal</span>
-    <span class="freq">Çağrı dönemlerinde</span>
-  </div>
-  <div class="priority">
-    <div class="priority-dot"></div>
-    <div class="priority-dot"></div>
-    <div class="priority-dot"></div>
-  </div>
-</div>
-  
-<!-- TÜRKİYE ULUSAL -->
-<div class="section">
-  <div class="section-header">
-    <div class="dot" style="background:var(--accent-tr)"></div>
-    <h2>Türkiye Ulusal Kaynaklar</h2>
-  </div>
-  <div class="card-grid">
 
-    <div class="card">
-      <div class="card-main">
-        <div class="card-name"><a href="https://www.tbb.gov.tr/tr/acik-hibe-ve-destek-programlari" target="_blank">TBB — Hibe Duyuruları</a></div>
-        <div class="card-desc">Türkiye Belediyeler Birliği. Belediyeler için AB mali yardımları, büyükelçilik fonları, kalkınma ajansı destekleri. Proje eğitim materyalleri de mevcut.</div>
-      </div>
-      <div class="card-meta">
-        <span class="tag tag-portal">Portal</span>
-        <span class="freq">Haftalık kontrol</span>
-      </div>
-      <div class="priority">
-        <div class="priority-dot"></div>
-        <div class="priority-dot"></div>
-        <div class="priority-dot"></div>
-      </div>
+  <!-- AB / ULUSLARARASI -->
+  <div class="section" data-section="eu">
+    <div class="section-header">
+      <div class="section-dot" style="color:var(--accent-eu); background:var(--accent-eu)"></div>
+      <h2>AB &amp; Uluslararası Kaynaklar</h2>
+      <span class="section-count">5 kaynak</span>
     </div>
-    <div class="card">
-      <div class="card-main">
-        <div class="card-name"><a href="https://ka.gov.tr/destekler" target="_blank">ka.gov.tr — Kalkınma Ajansları Güncel Destekler</a></div>
-        <div class="card-desc">Tüm kalkınma ajanslarının desteklerini tek sayfada filtreleyerek gösterir. SOGEP, teknik destek, güdümlü proje vb.</div>
-      </div>
-      <div class="card-meta">
-        <span class="tag tag-portal">Portal</span>
-        <span class="freq">Haftalık kontrol</span>
-      </div>
-      <div class="priority">
-        <div class="priority-dot"></div>
-        <div class="priority-dot"></div>
-        <div class="priority-dot"></div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-main">
-        <div class="card-name"><a href="https://www.stgm.org.tr/hibeler" target="_blank">STGM — Hibe Duyuruları</a></div>
-        <div class="card-desc">Sivil Toplum Geliştirme Merkezi. Haftalık e-bülten + Telegram kanalı. STK odaklı ama belediye-ortaklı çağrıları da kapsıyor.</div>
-      </div>
-      <div class="card-meta">
-        <span class="tag tag-newsletter">Bülten</span>
-        <span class="freq">Haftalık</span>
-      </div>
-      <div class="priority">
-        <div class="priority-dot"></div>
-        <div class="priority-dot"></div>
-        <div class="priority-dot off"></div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-main">
-        <div class="card-name"><a href="https://www.danismend.com/altkategori/proje-hibe-destekleri/36/" target="_blank">danismend.com — Proje Hibe Destekleri</a></div>
-        <div class="card-desc">Memet Özkan'ın kapsamlı derlemesi. Bakanlık, AB, BM, büyükelçilik çağrıları. Boş mail at → bülten listesine eklenirsin.</div>
-      </div>
-      <div class="card-meta">
-        <span class="tag tag-newsletter">Bülten</span>
-        <span class="freq">Düzenli</span>
-      </div>
-      <div class="priority">
-        <div class="priority-dot"></div>
-        <div class="priority-dot"></div>
-        <div class="priority-dot off"></div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-main">
-        <div class="card-name"><a href="https://sivilalan.com/category/hibe-duyurulari/" target="_blank">Sivil Alan</a></div>
-        <div class="card-desc">Hibe duyuruları, eğitim çağrıları, iş ilanları. Büyükelçilik fonları ve AB programları dahil.</div>
-      </div>
-      <div class="card-meta">
-        <span class="tag tag-portal">Portal</span>
-        <span class="freq">Haftalık kontrol</span>
-      </div>
-      <div class="priority">
-        <div class="priority-dot"></div>
-        <div class="priority-dot off"></div>
-        <div class="priority-dot off"></div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-main">
-        <div class="card-name"><a href="https://www.sivilsayfalar.org/" target="_blank">Sivil Sayfalar</a></div>
-        <div class="card-desc">Sivil toplum haberleri, hibe duyuruları. Belediye-STK ortaklıklı programları erken yakalarsın.</div>
-      </div>
-      <div class="card-meta">
-        <span class="tag tag-portal">Portal</span>
-        <span class="freq">Haftalık kontrol</span>
-      </div>
-      <div class="priority">
-        <div class="priority-dot"></div>
-        <div class="priority-dot off"></div>
-        <div class="priority-dot off"></div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-main">
-        <div class="card-name"><a href="https://www.projeakademisi.com/" target="_blank">Proje Akademisi</a></div>
-        <div class="card-desc">Aylık hibe derlemesi. Belediye odaklı destek programları, kalkınma ajansı çağrıları, uluslararası fonlar.</div>
-      </div>
-      <div class="card-meta">
-        <span class="tag tag-portal">Portal</span>
-        <span class="freq">Aylık</span>
-      </div>
-      <div class="priority">
-        <div class="priority-dot"></div>
-        <div class="priority-dot off"></div>
-        <div class="priority-dot off"></div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-main">
-        <div class="card-name"><a href="https://ab-ilan.com/" target="_blank">ab-ilan.com</a></div>
-        <div class="card-desc">AB ve ulusal hibe duyuruları.
+    <div class="card-grid">
+
+      <div class="card" data-category="eu">
+        <div class="card-main">
+          <div class="card-title">
+            <a href="https://ec.europa.eu/info/funding-tenders/opportunities/portal/" target="_blank" rel="noopener">EU Funding &amp; Tenders Portal</a>
+            <svg class="external-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </div>
+          <div class="card-desc">Resmi AB portalı. Horizon Europe, LIFE, Interreg, CERV vb. tüm açık çağrılar. İlgi alanına göre e-posta alert'i kurulabilir.</div>
+        </div>
+        <div class="card-right">
+          <span class="tag tag-alert">Alert</span>
+          <span class="freq">Anlık</span>
+          <div class="priority-bar">
+            <div class="priority-pip"></div>
+            <div class="priority-pip"></div>
+            <div class="priority-pip"></div>
+          </div>
         </div>
       </div>
-      <div class="card-meta">
-        <span class="tag tag-portal">Portal</span>
-        <span class="freq">Haftalık kontrol</span>
+
+      <div class="card" data-category="eu">
+        <div class="card-main">
+          <div class="card-title">
+            <a href="https://eufundingportal.eu/" target="_blank" rel="noopener">EUFundingPortal.eu</a>
+            <svg class="external-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </div>
+          <div class="card-desc">Bağımsız AB fon veritabanı. Ücretsiz günlük newsletter. 99€/yıl ile tüm detaylara erişim. 478+ açık çağrı.</div>
+        </div>
+        <div class="card-right">
+          <span class="tag tag-newsletter">Bülten</span>
+          <span class="freq">Günlük</span>
+          <div class="priority-bar">
+            <div class="priority-pip"></div>
+            <div class="priority-pip"></div>
+            <div class="priority-pip"></div>
+          </div>
+        </div>
       </div>
-      <div class="priority">
-        <div class="priority-dot"></div>
-        <div class="priority-dot off"></div>
-        <div class="priority-dot off"></div>
+
+      <div class="card" data-category="eu">
+        <div class="card-main">
+          <div class="card-title">
+            <a href="https://www.euro-access.eu/" target="_blank" rel="noopener">EuroAccess</a>
+            <svg class="external-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </div>
+          <div class="card-desc">Kuruluş türüne göre filtreleme, kişisel "funding basket", PDF export. Düzenli newsletter.</div>
+        </div>
+        <div class="card-right">
+          <span class="tag tag-newsletter">Bülten</span>
+          <span class="freq">Haftalık</span>
+          <div class="priority-bar">
+            <div class="priority-pip"></div>
+            <div class="priority-pip"></div>
+            <div class="priority-pip off"></div>
+          </div>
+        </div>
       </div>
+
+      <div class="card" data-category="eu">
+        <div class="card-main">
+          <div class="card-title">
+            <a href="https://keep.eu/" target="_blank" rel="noopener">keep.eu — Interreg Veritabanı</a>
+            <svg class="external-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </div>
+          <div class="card-desc">Tüm Interreg programları (MED, NEXT, Euro-MED vb.) proje ve partner veritabanı. Partner arama için birebir.</div>
+        </div>
+        <div class="card-right">
+          <span class="tag tag-portal">Portal</span>
+          <span class="freq">Sürekli</span>
+          <div class="priority-bar">
+            <div class="priority-pip"></div>
+            <div class="priority-pip"></div>
+            <div class="priority-pip off"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-category="eu">
+        <div class="card-main">
+          <div class="card-title">
+            <a href="https://www.interregnextmed.eu/apply-for-funding/" target="_blank" rel="noopener">Interreg NEXT MED</a>
+            <svg class="external-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </div>
+          <div class="card-desc">Akdeniz havzası sınır ötesi işbirliği. Çağrı dönemlerinde aktif.</div>
+        </div>
+        <div class="card-right">
+          <span class="tag tag-portal">Portal</span>
+          <span class="freq">Çağrı dönemleri</span>
+          <div class="priority-bar">
+            <div class="priority-pip"></div>
+            <div class="priority-pip"></div>
+            <div class="priority-pip"></div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
-</div>
-<div class="card">
-  <div class="card-main">
-    <div class="card-name"><a href="https://ua.gov.tr/anasayfa/icerikler/teklif-cagrilari-ve-rehberler/" target="_blank">Türkiye Ulusal Ajansı — Teklif Çağrıları</a></div>
-    <div class="card-desc">Erasmus+ ve Avrupa Dayanışma Programı (ESC) çağrıları. Belediyeler gençlik, eğitim ve spor projelerine başvurabilir. Program rehberleri de burada.</div>
-  </div>
-  <div class="card-meta">
-    <span class="tag tag-portal">Portal</span>
-    <span class="freq">Yıllık çağrılar</span>
-  </div>
-  <div class="priority">
-    <div class="priority-dot"></div>
-    <div class="priority-dot"></div>
-    <div class="priority-dot off"></div>
-  </div>
-</div>
-  <div class="card">
-  <div class="card-main">
-    <div class="card-name"><a href="https://www.avrupa.info.tr/tr/ab-mali-destegi" target="_blank">AB Türkiye Delegasyonu — Mali Destek</a></div>
-    <div class="card-desc">IPA III hibe çağrıları, sivil toplum destekleri, sektörel programlar. Türkiye'ye özel AB fonlarının tek resmi kaynağı.</div>
-  </div>
-  <div class="card-meta">
-    <span class="tag tag-portal">Portal</span>
-    <span class="freq">Haftalık kontrol</span>
-  </div>
-  <div class="priority">
-    <div class="priority-dot"></div>
-    <div class="priority-dot"></div>
-    <div class="priority-dot off"></div>
-  </div>
-</div>
-<div class="card">
-  <div class="card-main">
-    <div class="card-name"><a href="https://tubitak.gov.tr/tr/kurumsal/uluslararasi/cerceve-programlari"_blank">TÜBİTAK — AB Çerçeve Programları</a></div>
-    <div class="card-desc">Horizon Europe Ulusal İrtibat Noktaları (NCP). Açık çağrılar, bilgi günleri, partner arama etkinlikleri. Türkiye'nin Horizon Europe koordinasyonu buradan yürüyor.</div>
-  </div>
-  <div class="card-meta">
-    <span class="tag tag-portal">Portal</span>
-    <span class="freq">Aylık kontrol</span>
-  </div>
-  <div class="priority">
-    <div class="priority-dot"></div>
-    <div class="priority-dot"></div>
-    <div class="priority-dot off"></div>
-  </div>
-  
-<!-- İZMİR / YEREL -->
-<div class="section">
-  <div class="section-header">
-    <div class="dot" style="background:var(--accent-local)"></div>
-     </div>
-    <h2>İzmir & Yerel Kaynaklar</h2>
-  </div>
-  <div class="card-grid">
 
-    <div class="card">
-      <div class="card-main">
-        <div class="card-name"><a href="https://izka.org.tr/" target="_blank">İZKA — İzmir Kalkınma Ajansı</a></div>
-        <div class="card-desc">İzmir'e özgü mali destek programları, teknik destek, güdümlü projeler. Yıllık program ilanlarını kaçırma.</div>
-      </div>
-      <div class="card-meta">
-        <span class="tag tag-portal">Portal</span>
-        <span class="freq">Aylık kontrol</span>
-      </div>
-      <div class="priority">
-        <div class="priority-dot"></div>
-        <div class="priority-dot"></div>
-        <div class="priority-dot"></div>
-      </div>
+  <!-- TÜRKİYE ULUSAL -->
+  <div class="section" data-section="tr">
+    <div class="section-header">
+      <div class="section-dot" style="color:var(--accent-tr); background:var(--accent-tr)"></div>
+      <h2>Türkiye Ulusal Kaynaklar</h2>
+      <span class="section-count">11 kaynak</span>
     </div>
-    <div class="card">
-      <div class="card-main">
-        <div class="card-name"><a href="https://www.ika.org.tr/hibe-ve-fon-kaynaklari" target="_blank">İpekyolu KA — Hibe & Fon Kaynakları</a></div>
-        <div class="card-desc">Diğer ajanslardan farklı olarak ulusal/uluslararası çağrıları da derliyor. TÜBİTAK, KOSGEB, AB çağrıları dahil.</div>
+    <div class="card-grid">
+
+      <div class="card" data-category="tr">
+        <div class="card-main">
+          <div class="card-title">
+            <a href="https://www.tbb.gov.tr/tr/acik-hibe-ve-destek-programlari" target="_blank" rel="noopener">TBB — Hibe Duyuruları</a>
+            <svg class="external-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </div>
+          <div class="card-desc">Türkiye Belediyeler Birliği. Belediyeler için AB mali yardımları, büyükelçilik fonları, kalkınma ajansı destekleri. Proje eğitim materyalleri de mevcut.</div>
+        </div>
+        <div class="card-right">
+          <span class="tag tag-portal">Portal</span>
+          <span class="freq">Haftalık kontrol</span>
+          <div class="priority-bar">
+            <div class="priority-pip"></div>
+            <div class="priority-pip"></div>
+            <div class="priority-pip"></div>
+          </div>
+        </div>
       </div>
-      <div class="card-meta">
-        <span class="tag tag-portal">Portal</span>
-        <span class="freq">Haftalık kontrol</span>
+
+      <div class="card" data-category="tr">
+        <div class="card-main">
+          <div class="card-title">
+            <a href="https://ka.gov.tr/destekler" target="_blank" rel="noopener">ka.gov.tr — Kalkınma Ajansları Güncel Destekler</a>
+            <svg class="external-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </div>
+          <div class="card-desc">Tüm kalkınma ajanslarının desteklerini tek sayfada filtreleyerek gösterir. SOGEP, teknik destek, güdümlü proje vb.</div>
+        </div>
+        <div class="card-right">
+          <span class="tag tag-portal">Portal</span>
+          <span class="freq">Haftalık kontrol</span>
+          <div class="priority-bar">
+            <div class="priority-pip"></div>
+            <div class="priority-pip"></div>
+            <div class="priority-pip"></div>
+          </div>
+        </div>
       </div>
-      <div class="priority">
-        <div class="priority-dot"></div>
-        <div class="priority-dot"></div>
-        <div class="priority-dot off"></div>
+
+      <div class="card" data-category="tr">
+        <div class="card-main">
+          <div class="card-title">
+            <a href="https://www.stgm.org.tr/hibeler" target="_blank" rel="noopener">STGM — Hibe Duyuruları</a>
+            <svg class="external-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </div>
+          <div class="card-desc">Sivil Toplum Geliştirme Merkezi. Haftalık e-bülten + Telegram kanalı. STK odaklı ama belediye-ortaklı çağrıları da kapsıyor.</div>
+        </div>
+        <div class="card-right">
+          <span class="tag tag-newsletter">Bülten</span>
+          <span class="freq">Haftalık</span>
+          <div class="priority-bar">
+            <div class="priority-pip"></div>
+            <div class="priority-pip"></div>
+            <div class="priority-pip off"></div>
+          </div>
+        </div>
       </div>
+
+      <div class="card" data-category="tr">
+        <div class="card-main">
+          <div class="card-title">
+            <a href="https://www.danismend.com/altkategori/proje-hibe-destekleri/36/" target="_blank" rel="noopener">danismend.com — Proje Hibe Destekleri</a>
+            <svg class="external-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </div>
+          <div class="card-desc">Memet Özkan'ın kapsamlı derlemesi. Bakanlık, AB, BM, büyükelçilik çağrıları. Boş mail at → bülten listesine eklenirsin.</div>
+        </div>
+        <div class="card-right">
+          <span class="tag tag-newsletter">Bülten</span>
+          <span class="freq">Düzenli</span>
+          <div class="priority-bar">
+            <div class="priority-pip"></div>
+            <div class="priority-pip"></div>
+            <div class="priority-pip off"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-category="tr">
+        <div class="card-main">
+          <div class="card-title">
+            <a href="https://ua.gov.tr/anasayfa/icerikler/teklif-cagrilari-ve-rehberler/" target="_blank" rel="noopener">Türkiye Ulusal Ajansı — Teklif Çağrıları</a>
+            <svg class="external-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </div>
+          <div class="card-desc">Erasmus+ ve Avrupa Dayanışma Programı (ESC) çağrıları. Belediyeler gençlik, eğitim ve spor projelerine başvurabilir.</div>
+        </div>
+        <div class="card-right">
+          <span class="tag tag-portal">Portal</span>
+          <span class="freq">Yıllık çağrılar</span>
+          <div class="priority-bar">
+            <div class="priority-pip"></div>
+            <div class="priority-pip"></div>
+            <div class="priority-pip off"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-category="tr">
+        <div class="card-main">
+          <div class="card-title">
+            <a href="https://www.avrupa.info.tr/tr/ab-mali-destegi" target="_blank" rel="noopener">AB Türkiye Delegasyonu — Mali Destek</a>
+            <svg class="external-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </div>
+          <div class="card-desc">IPA III hibe çağrıları, sivil toplum destekleri, sektörel programlar. Türkiye'ye özel AB fonlarının tek resmi kaynağı.</div>
+        </div>
+        <div class="card-right">
+          <span class="tag tag-portal">Portal</span>
+          <span class="freq">Haftalık kontrol</span>
+          <div class="priority-bar">
+            <div class="priority-pip"></div>
+            <div class="priority-pip"></div>
+            <div class="priority-pip off"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-category="tr">
+        <div class="card-main">
+          <div class="card-title">
+            <a href="https://tubitak.gov.tr/tr/kurumsal/uluslararasi/cerceve-programlari" target="_blank" rel="noopener">TÜBİTAK — AB Çerçeve Programları</a>
+            <svg class="external-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </div>
+          <div class="card-desc">Horizon Europe Ulusal İrtibat Noktaları (NCP). Açık çağrılar, bilgi günleri, partner arama etkinlikleri.</div>
+        </div>
+        <div class="card-right">
+          <span class="tag tag-portal">Portal</span>
+          <span class="freq">Aylık kontrol</span>
+          <div class="priority-bar">
+            <div class="priority-pip"></div>
+            <div class="priority-pip"></div>
+            <div class="priority-pip off"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-category="tr">
+        <div class="card-main">
+          <div class="card-title">
+            <a href="https://sivilalan.com/category/hibe-duyurulari/" target="_blank" rel="noopener">Sivil Alan</a>
+            <svg class="external-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </div>
+          <div class="card-desc">Hibe duyuruları, eğitim çağrıları, iş ilanları. Büyükelçilik fonları ve AB programları dahil.</div>
+        </div>
+        <div class="card-right">
+          <span class="tag tag-portal">Portal</span>
+          <span class="freq">Haftalık kontrol</span>
+          <div class="priority-bar">
+            <div class="priority-pip"></div>
+            <div class="priority-pip off"></div>
+            <div class="priority-pip off"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-category="tr">
+        <div class="card-main">
+          <div class="card-title">
+            <a href="https://www.sivilsayfalar.org/" target="_blank" rel="noopener">Sivil Sayfalar</a>
+            <svg class="external-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </div>
+          <div class="card-desc">Sivil toplum haberleri, hibe duyuruları. Belediye-STK ortaklıklı programları erken yakalarsın.</div>
+        </div>
+        <div class="card-right">
+          <span class="tag tag-portal">Portal</span>
+          <span class="freq">Haftalık kontrol</span>
+          <div class="priority-bar">
+            <div class="priority-pip"></div>
+            <div class="priority-pip off"></div>
+            <div class="priority-pip off"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-category="tr">
+        <div class="card-main">
+          <div class="card-title">
+            <a href="https://www.projeakademisi.com/" target="_blank" rel="noopener">Proje Akademisi</a>
+            <svg class="external-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </div>
+          <div class="card-desc">Aylık hibe derlemesi. Belediye odaklı destek programları, kalkınma ajansı çağrıları, uluslararası fonlar.</div>
+        </div>
+        <div class="card-right">
+          <span class="tag tag-portal">Portal</span>
+          <span class="freq">Aylık</span>
+          <div class="priority-bar">
+            <div class="priority-pip"></div>
+            <div class="priority-pip off"></div>
+            <div class="priority-pip off"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-category="tr">
+        <div class="card-main">
+          <div class="card-title">
+            <a href="https://ab-ilan.com/" target="_blank" rel="noopener">ab-ilan.com</a>
+            <svg class="external-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </div>
+          <div class="card-desc">AB ve ulusal hibe duyuruları.</div>
+        </div>
+        <div class="card-right">
+          <span class="tag tag-portal">Portal</span>
+          <span class="freq">Haftalık kontrol</span>
+          <div class="priority-bar">
+            <div class="priority-pip"></div>
+            <div class="priority-pip off"></div>
+            <div class="priority-pip off"></div>
+          </div>
+        </div>
+      </div>
+
     </div>
-
   </div>
+
+  <!-- İZMİR / YEREL -->
+  <div class="section" data-section="local">
+    <div class="section-header">
+      <div class="section-dot" style="color:var(--accent-local); background:var(--accent-local)"></div>
+      <h2>İzmir &amp; Yerel Kaynaklar</h2>
+      <span class="section-count">2 kaynak</span>
+    </div>
+    <div class="card-grid">
+
+      <div class="card" data-category="local">
+        <div class="card-main">
+          <div class="card-title">
+            <a href="https://izka.org.tr/" target="_blank" rel="noopener">İZKA — İzmir Kalkınma Ajansı</a>
+            <svg class="external-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </div>
+          <div class="card-desc">İzmir'e özgü mali destek programları, teknik destek, güdümlü projeler. Yıllık program ilanlarını kaçırma.</div>
+        </div>
+        <div class="card-right">
+          <span class="tag tag-portal">Portal</span>
+          <span class="freq">Aylık kontrol</span>
+          <div class="priority-bar">
+            <div class="priority-pip"></div>
+            <div class="priority-pip"></div>
+            <div class="priority-pip"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-category="local">
+        <div class="card-main">
+          <div class="card-title">
+            <a href="https://www.ika.org.tr/hibe-ve-fon-kaynaklari" target="_blank" rel="noopener">İpekyolu KA — Hibe &amp; Fon Kaynakları</a>
+            <svg class="external-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </div>
+          <div class="card-desc">Diğer ajanslardan farklı olarak ulusal/uluslararası çağrıları da derliyor. TÜBİTAK, KOSGEB, AB çağrıları dahil.</div>
+        </div>
+        <div class="card-right">
+          <span class="tag tag-portal">Portal</span>
+          <span class="freq">Haftalık kontrol</span>
+          <div class="priority-bar">
+            <div class="priority-pip"></div>
+            <div class="priority-pip"></div>
+            <div class="priority-pip off"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FOOTER: RUTIN + PROGRAM DURUMU -->
+  <div class="footer-card">
+    <h3>💡 Haftalık Rutin Önerisi</h3>
+    <p>
+      <strong>Pazartesi →</strong> TBB + ka.gov.tr + İZKA duyuruları kontrol et.<br>
+      <strong>Bültenler →</strong> STGM, EUFundingPortal, danismend.com otomatik gelecek.<br>
+      <strong>Alert →</strong> AB Funding &amp; Tenders Portal'da <em>"local authorities", "municipalities", "urban", "climate"</em> anahtar kelimelerle alert kur. Horizon Europe, Interreg NEXT MED, Erasmus+ programlarını filtrele.
+    </p>
+  </div>
+
+  <div class="footer-card" style="margin-top: 0.6rem;">
+    <h3>🇹🇷 Türkiye'nin Asosye Olduğu AB Programları</h3>
+    <div class="program-status">
+      <span class="program-chip"><span class="status-dot status-yes"></span> Horizon Europe</span>
+      <span class="program-chip"><span class="status-dot status-yes"></span> Erasmus+</span>
+      <span class="program-chip"><span class="status-dot status-yes"></span> Digital Europe</span>
+      <span class="program-chip"><span class="status-dot status-yes"></span> Interreg NEXT MED</span>
+      <span class="program-chip"><span class="status-dot status-yes"></span> Interreg IPA CBC</span>
+      <span class="program-chip"><span class="status-dot status-yes"></span> IPA III</span>
+      <span class="program-chip"><span class="status-dot status-pending"></span> LIFE (müzakere)</span>
+      <span class="program-chip"><span class="status-dot status-no"></span> URBACT</span>
+      <span class="program-chip"><span class="status-dot status-no"></span> Creative Europe</span>
+      <span class="program-chip"><span class="status-dot status-no"></span> CERV</span>
+    </div>
+  </div>
+
+  <div class="site-footer">
+    Hibe Takip Robotu — İzmir Büyükşehir Belediyesi AB Hibe Projeleri Birimi
+  </div>
+
 </div>
 
-<div class="footer-note">
-  <strong>💡 Haftalık Rutin Önerisi:</strong> Pazartesi → TBB +
-  ka.gov.tr + İZKA duyuruları kontrol et. Bültenler (STGM,
-  EUFundingPortal, danismend.com) otomatik gelecek. AB Funding
-  &amp; Tenders Portal'da "local authorities", "municipalities",
-  "urban", "climate" anahtar kelimelerle alert kur. Horizon Europe,
-  Interreg NEXT MED, Erasmus+ programlarını filtrele.
-  <br><br>
-  <strong>🇹🇷 Türkiye'nin asosye olduğu AB programları:</strong>
-  Horizon Europe ✅ | Erasmus+ ✅ | Digital Europe ✅ |
-  Interreg NEXT MED ✅ | Interreg IPA CBC ✅ | IPA III ✅ |
-  LIFE ⏳ (müzakere devam ediyor) | URBACT ❌ | Creative Europe ❌ | CERV ❌
-</div>
+<!-- FILTER JS -->
+<script>
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const cards = document.querySelectorAll('.card');
+  const sections = document.querySelectorAll('.section');
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+
+      sections.forEach(sec => {
+        if (filter === 'all') {
+          sec.style.display = '';
+        } else {
+          sec.style.display = sec.dataset.section === filter ? '' : 'none';
+        }
+      });
+
+      cards.forEach(card => {
+        if (filter === 'all') {
+          card.style.display = '';
+        } else {
+          card.style.display = card.dataset.category === filter ? '' : 'none';
+        }
+      });
+    });
+  });
+</script>
+</body>
+</html>
